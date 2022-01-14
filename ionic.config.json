@@ -1,0 +1,8 @@
+{
+  "name": "My Meet",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular",
+  "id": "353b9e50"
+}
