@@ -1,0 +1,66 @@
+pipeline {
+    agent none
+    tools {
+        maven 'maven'
+    }
+    stages {
+
+    /*
+    stage('Checkout') {
+                agent any
+                steps {
+                    git branch: "master",
+                    credentialsId: 'jenkinz',
+                    url: "https://github.com/rachidpeaqock/mymeet-backend.git"
+
+
+                }
+            }
+*/
+
+        stage('Build') {
+            agent any
+            steps {
+                sh 'mvn  clean install -Dspring.profiles.active=rci -DskipTests=true'
+            }
+        }
+
+/*
+  
+
+*/
+
+        stage('Sonarqube') {
+        agent any
+        steps{
+            withSonarQubeEnv('SonarQube') {
+
+                sh 'mvn clean install  sonar:sonar -DrunSonar -Dsonar.password=admin -Dsonar.login=admin'
+
+               }
+
+            }
+        }
+
+
+      stage("Quality Gate") {
+      agent any
+        steps {
+         script {
+              sleep(60)
+              timeout(time: 1, unit: 'MINUTES') {
+                def qg = waitForQualityGate()
+                print "Finished waiting"
+                if (qg.status != 'OK') {
+                    error "Pipeline aborted due to quality gate failure: ${qg.status}"
+                }
+            }
+             }
+        }
+       }
+
+
+
+
+    
+}
