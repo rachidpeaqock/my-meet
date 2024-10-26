@@ -8,6 +8,8 @@ export class AppComponent {
   // comit 1
 
   //comit 2
+
+  //commit
   public appPages = [
     { title: 'Inbox', url: '/folder/Inbox', icon: 'mail' },
     { title: 'Outbox', url: '/folder/Outbox', icon: 'paper-plane' },
